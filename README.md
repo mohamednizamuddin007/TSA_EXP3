@@ -1,5 +1,7 @@
 # Ex.No: 03   COMPUTE THE AUTO FUNCTION(ACF)
-Date: 
+## Date: 02.05.2026
+## NAME: MOHAMED NIZAMUDDIN A
+## REG NO: 212224040194
 
 ### AIM:
 To Compute the AutoCorrelation Function (ACF) of the data for the first 35 lags to determine the model
@@ -11,33 +13,52 @@ type to fit the data.
 4. Store the results in an array
 5. Represent the result in graphical representation as given below.
 ### PROGRAM:
+```
 import matplotlib.pyplot as plt
-
 import numpy as np
+import pandas as pd
+import os
 
-data = [3, 16, 156, 47, 246, 176, 233, 140, 130,
-101, 166, 201, 200, 116, 118, 247,
-209, 52, 153, 232, 128, 27, 192, 168, 208,
-187, 228, 86, 30, 151, 18, 254,
-76, 112, 67, 244, 179, 150, 89, 49, 83, 147, 90,
-33, 6, 158, 80, 35, 186, 127]
+# Path to the dataset provided
+file_path = "/content/DailyDelhiClimateTrain.csv"
 
+# Load the dataset
+df = pd.read_csv(file_path)
+
+# Select the 'humidity' column for analysis
+data = df['humidity'].values
+N = len(data)
 lags = range(35)
+autocorr_values = []
 
+# Calculate mean and variance
+mean_data = np.mean(data)
+variance_data = np.var(data)
 
-#Pre-allocate autocorrelation table
+# Compute Autocorrelation Function (ACF) manually
+for lag in lags:
+    if lag == 0:
+        autocorr_values.append(1.0)
+    else:
+        # Covariance at specific lag
+        auto_cov = np.sum((data[:-lag] - mean_data) * (data[lag:] - mean_data)) / N
+        autocorr_values.append(auto_cov / variance_data)
 
-#Mean
+# Generate the visualization
+plt.figure(figsize=(12, 6))
+plt.stem(lags, autocorr_values)
+plt.title('Autocorrelation of Humidity (Daily Delhi Climate)')
+plt.xlabel('Lag (Days)')
+plt.ylabel('Autocorrelation')
+plt.axhline(y=0, color='black', linestyle='-')
+plt.grid(True, linestyle='--', alpha=0.7)
+plt.show()
 
-#Variance
-
-#Normalized data
-
-#Go through lag components one-by-one
-
-#display the graph
-
+# Display summary statistics
+display(df[['humidity']].describe())
+```
 ### OUTPUT:
+<img width="1001" height="547" alt="image" src="https://github.com/user-attachments/assets/9fe363b1-934b-448b-b875-fb698bb9b662" />
 
 ### RESULT:
-        Thus we have successfully implemented the auto correlation function in python.
+Thus we have successfully implemented the auto correlation function in python.
